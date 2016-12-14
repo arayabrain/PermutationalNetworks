@@ -8,9 +8,10 @@ from lasagne.layers import helper
 # To include this layer in a model, the input should be a rank 3 tensor of the form (BATCH, FEATURES, OBJECTS)
 #
 # You must also specify the network contained within the permutation equivariant wrapper. To do this, create
-# a separate InputLayer with input shape (BATCH,FEATURES,OBJECTS,OBJECTS) and then create a network using
+# a separate InputLayer with input shape (BATCH,2*FEATURES,OBJECTS,OBJECTS) and then create a network using
 # Lasagne's NINLayer in place of DenseLayer. This way, the dense network is applied identically and in parallel to
-# all interaction pairs. The final layer of that network should be provided as the 'subnet' argument.
+# all interaction pairs. The reason that the second dimension is 2*FEATURES is that it concatenates features from
+# two objects. The final layer of that network should be provided as the 'subnet' argument.
 #
 # Finally, pooling is applied on the trailing dimension. This is specified by the 'pooling' argument, which can be
 # one of 'mean', 'max', or a custom theano function (which should perform a reduction over the fourth dimension of the 
