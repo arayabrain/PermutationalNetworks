@@ -19,12 +19,12 @@ from lasagne.layers import helper
 ###########################################3
 
 class PermutationalLayer(lasagne.layers.Layer):
-    def __init__(self,incoming,subnet,pooling='mean',**kwargs):
-        super(PermutationalLayer, self).__init__(incoming, **kwargs)
-        self.subnet = subnet
-        self.pooling = pooling
-        
-    def get_output_for(self, input):
+	def __init__(self,incoming,subnet,pooling='mean',**kwargs):
+		super(PermutationalLayer, self).__init__(incoming, **kwargs)
+		self.subnet = subnet
+		self.pooling = pooling
+
+	def get_output_for(self, input):
 		rs = input.reshape((input.shape[0], input.shape[1], input.shape[2], 1)) # B,V,S,1
 		z1 = T.tile( rs, (1,1,1,input.shape[2]))
 		z2 = z1.transpose((0,1,3,2))
@@ -36,12 +36,12 @@ class PermutationalLayer(lasagne.layers.Layer):
 			return T.max(Y,axis=3)
 		else: return self.pooling(Y)
 
-    def get_params(self, **tags):
+	def get_params(self, **tags):
 		# Get all parameters from this layer, the master layer
 		params = super(PermutationalLayer, self).get_params(**tags)
 		# Combine with all parameters from the child layers
 		params += helper.get_all_params(self.subnet, **tags)
 		return params
 
-    def get_output_shape_for(self, input_shape):
-        return (input_shape[0], self.subnet.output_shape[1], input_shape[2])
+	def get_output_shape_for(self, input_shape):
+		return (input_shape[0], self.subnet.output_shape[1], input_shape[2])
